@@ -1,11 +1,11 @@
 /* ─────────────────────────────────────────────────────────────
-   APPLE DESIGN EDITION — SYARIF ADRIAN PORTFOLIO
-   Design System: Apple WWDC Fluid Interfaces, SF Typography,
-   Materials, Natural Momentum Scrolling, Tabular Numerals.
+   APPLE DESIGN SYSTEM — SYARIF ADRIAN PORTFOLIO
+   WWDC Fluid Interfaces · SF Typography · Translucent Materials
+   Desktop Elevation · Mobile-Native Touch Ergonomics
    ───────────────────────────────────────────────────────────── */
 
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
   --bg: #f5f5f7;
   --bg-secondary: #ffffff;
   --bg-tertiary: #f0f0f3;
@@ -66,9 +66,11 @@
 html {
   /* Natural momentum scrolling without scroll-snap fight */
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: calc(5rem + env(safe-area-inset-top, 0px));
   background: var(--bg);
   -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -98,6 +100,29 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Touch ergonomics & eliminate 300ms delay */
+button,
+a,
+[role="button"],
+.project-selector-card,
+.image-tile,
+.phone-shot {
+  touch-action: manipulation;
+}
+
+/* Prevent long-press selecting control labels */
+button,
+[role="button"],
+.button,
+.project-selector-card,
+.card-step-badge,
+.card-status-indicator,
+.menu-toggle {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -125,7 +150,7 @@ img {
   letter-spacing: -0.035em;
 }
 
-/* ── Scroll Progress Bar (Minimal Apple Top Accent) ── */
+/* ── Scroll Progress Bar ── */
 .scroll-progress {
   position: fixed;
   inset: 0 0 auto;
@@ -144,13 +169,14 @@ img {
   transition: width 90ms linear;
 }
 
-/* ── Apple Frosted Glass Header ── */
+/* ── Apple Frosted Glass Header (Safe-Area Aware) ── */
 .site-header {
   position: fixed;
   z-index: 90;
   top: 0;
   left: 0;
   width: 100%;
+  padding-top: env(safe-area-inset-top, 0px);
   background: rgba(245, 245, 247, 0.78);
   -webkit-backdrop-filter: saturate(180%) blur(22px);
   backdrop-filter: saturate(180%) blur(22px);
@@ -164,6 +190,8 @@ img {
   min-height: 56px;
   margin: 0 auto;
   padding: 0 var(--page-pad);
+  padding-left: max(var(--page-pad), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--page-pad), env(safe-area-inset-right, 0px));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -204,10 +232,6 @@ img {
   transition: color 160ms ease;
 }
 
-.nav-links a:hover {
-  color: var(--ink);
-}
-
 .nav-links a.is-active {
   color: var(--ink);
   font-weight: 600;
@@ -231,8 +255,8 @@ img {
 }
 
 .nav-github {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -251,42 +275,44 @@ img {
   stroke-linejoin: round;
 }
 
-.nav-github:hover {
-  background: rgba(0, 0, 0, 0.08);
-}
-
 .nav-github:active {
   transform: scale(0.92);
   background: rgba(0, 0, 0, 0.12);
 }
 
+/* Touch-optimized 44px menu button for mobile */
 .menu-toggle {
   display: none;
-  width: 36px;
-  height: 36px;
-  padding: 8px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  padding: 11px 9px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.04);
+  transition: background 160ms ease, transform 80ms var(--ease-press);
+}
+
+.menu-toggle:active {
+  transform: scale(0.92);
+  background: rgba(0, 0, 0, 0.09);
 }
 
 .menu-toggle span {
   display: block;
-  height: 1.5px;
+  height: 2px;
   margin: 5px 0;
   background: var(--ink);
   border-radius: 2px;
-  transition: transform 200ms var(--ease-spring);
+  transition: transform 220ms var(--ease-spring);
 }
 
-/* ── Typography & Headings (Refined SF Hierarchy) ── */
+/* ── Typography & Headings ── */
 h1, h2, h3, p {
   margin-top: 0;
 }
 
 h1, h2 {
   font-weight: 700;
-  /* Softened from -0.065em to Apple's display tracking */
   letter-spacing: -0.028em;
-  /* Comfortable line height avoiding descender collisions */
   line-height: 1.08;
 }
 
@@ -376,7 +402,7 @@ h2 {
   font-weight: 600;
   letter-spacing: -0.015em;
   text-decoration: none;
-  /* Instant press, spring release */
+  /* Instant 70ms press, spring release */
   transition: transform 70ms var(--ease-press), background 160ms ease, box-shadow 160ms ease;
   cursor: pointer;
   white-space: nowrap;
@@ -392,11 +418,6 @@ h2 {
   box-shadow: 0 4px 14px rgba(0, 113, 227, 0.28);
 }
 
-.button-accent:hover {
-  background: var(--blue-hover);
-  box-shadow: 0 6px 18px rgba(0, 113, 227, 0.35);
-}
-
 .button-accent:active {
   background: var(--blue-pressed);
   box-shadow: 0 2px 8px rgba(0, 113, 227, 0.2);
@@ -409,12 +430,6 @@ h2 {
   box-shadow: var(--shadow-sm);
 }
 
-.button-quiet:hover {
-  background: #ffffff;
-  border-color: var(--line-strong);
-  box-shadow: var(--shadow-md);
-}
-
 .button-quiet:active {
   background: #f0f0f3;
 }
@@ -425,23 +440,16 @@ h2 {
   transition: transform 180ms ease;
 }
 
-.button:hover .arrow {
-  transform: translate(2px, 0);
-}
-
 .text-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  min-height: 44px; /* Touch target */
   color: var(--blue);
   font-size: 0.88rem;
   font-weight: 600;
   letter-spacing: -0.01em;
   transition: gap 180ms ease, opacity 160ms ease;
-}
-
-.text-link:hover {
-  gap: 0.75rem;
 }
 
 .text-link:active {
@@ -599,10 +607,6 @@ h2 {
   transition: color 160ms ease;
 }
 
-.scroll-cue:hover {
-  color: var(--ink);
-}
-
 .scroll-line {
   width: 24px;
   height: 1px;
@@ -682,17 +686,13 @@ h2 {
 .pdf-topbar > a {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
   color: var(--blue);
   background: rgba(0, 113, 227, 0.08);
   font-size: 1.05rem;
   transition: background 160ms ease, transform 80ms var(--ease-press);
-}
-
-.pdf-topbar > a:hover {
-  background: rgba(0, 113, 227, 0.16);
 }
 
 .pdf-topbar > a:active {
@@ -740,16 +740,7 @@ h2 {
   color: var(--ink);
   cursor: pointer;
   text-align: left;
-  /* Snappy press with smooth spring settle */
   transition: transform 70ms var(--ease-press), border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
-  user-select: none;
-}
-
-.project-selector-card:hover {
-  background: #ffffff;
-  border-color: var(--line-strong);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
 }
 
 .project-selector-card:active {
@@ -859,11 +850,6 @@ h2 {
   transition: color 180ms ease, gap 180ms ease;
 }
 
-.project-selector-card:hover .card-action-cue {
-  color: var(--blue);
-  gap: 0.5rem;
-}
-
 .project-selector-card.is-active .card-action-cue {
   color: var(--blue);
   font-weight: 600;
@@ -887,7 +873,6 @@ h2 {
 
 .project-panel.is-active:not([hidden]) {
   display: block;
-  /* Fluid Apple Crossfade & Settle */
   animation: panelSettle 320ms var(--ease-spring) forwards;
 }
 
@@ -1018,7 +1003,6 @@ h2 {
   min-height: 480px;
 }
 
-/* Clean, crisp tiles without messy tilts */
 .image-tile {
   position: absolute;
   display: block;
@@ -1030,7 +1014,7 @@ h2 {
   box-shadow: var(--shadow-lg);
   cursor: zoom-in;
   text-align: left;
-  transform: none; /* No arbitrary tilt! */
+  transform: none;
   transition: transform 180ms var(--ease-spring), box-shadow 180ms ease, z-index 0s;
 }
 
@@ -1039,12 +1023,6 @@ h2 {
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-.image-tile:hover {
-  z-index: 10 !important;
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-float);
 }
 
 .image-tile:active {
@@ -1217,7 +1195,6 @@ h2 {
   pointer-events: none;
 }
 
-/* Orthographic Triple Phones: Clean, Aligned, Crisp */
 .phone-shot {
   position: absolute;
   display: block;
@@ -1230,7 +1207,7 @@ h2 {
   background: #000000;
   box-shadow: var(--shadow-float);
   cursor: zoom-in;
-  transform: none; /* No ugly tilts! */
+  transform: none;
   transition: transform 220ms var(--ease-spring), box-shadow 220ms ease, z-index 0s;
 }
 
@@ -1271,13 +1248,6 @@ h2 {
   z-index: 2;
   transform: translateY(16px) scale(0.92);
   opacity: 0.88;
-}
-
-.phone-shot:hover {
-  z-index: 10 !important;
-  opacity: 1;
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.22);
 }
 
 .phone-shot:active {
@@ -1421,10 +1391,6 @@ h2 {
   background: #ffffff;
   box-shadow: var(--shadow-sm);
   transition: box-shadow 180ms ease, transform 180ms ease;
-}
-
-.profile-card:hover {
-  box-shadow: var(--shadow-md);
 }
 
 .profile-card-icon {
@@ -1758,10 +1724,6 @@ h2 {
   transition: box-shadow 180ms ease, transform 180ms ease;
 }
 
-.credential-card:hover {
-  box-shadow: var(--shadow-md);
-}
-
 .credential-top {
   display: flex;
   align-items: center;
@@ -1830,14 +1792,13 @@ h2 {
 }
 
 .credential-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: var(--blue);
   font-size: 0.8rem;
   font-weight: 600;
   transition: opacity 160ms ease;
-}
-
-.credential-footer a:hover {
-  text-decoration: underline;
 }
 
 .credential-footer a:active {
@@ -1852,14 +1813,13 @@ h2 {
   flex-direction: column;
   justify-content: space-between;
   padding-top: clamp(6rem, 11vh, 8.5rem);
-  padding-bottom: 2rem;
+  padding-bottom: calc(2.5rem + env(safe-area-inset-bottom, 0px));
   color: #f5f5f7;
   background: #141416;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   overflow: hidden;
 }
 
-/* Atmospheric Glow */
 .contact-page::before {
   position: absolute;
   content: "";
@@ -1917,12 +1877,6 @@ h2 {
   transition: transform 70ms var(--ease-press), background 180ms ease, border-color 180ms ease;
 }
 
-.contact-link:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.24);
-  transform: translateY(-2px);
-}
-
 .contact-link:active {
   transform: scale(0.97);
   background: rgba(255, 255, 255, 0.12);
@@ -1970,11 +1924,6 @@ h2 {
   transition: transform 180ms ease, color 180ms ease;
 }
 
-.contact-link:hover .contact-arrow {
-  color: #ffffff;
-  transform: translate(2px, -2px);
-}
-
 .site-footer {
   position: relative;
   z-index: 2;
@@ -1986,6 +1935,7 @@ h2 {
   justify-content: space-between;
   gap: 1.5rem;
   padding-top: 1.5rem;
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   color: #86868b;
   font-size: 0.75rem;
@@ -1996,13 +1946,14 @@ h2 {
   font-size: 1.05rem;
 }
 
-/* ── Lightbox Modal (Apple QuickLook sheet) ── */
+/* ── Lightbox Modal ── */
 .lightbox {
   position: fixed;
   width: min(92vw, 1300px);
   max-width: min(92vw, 1300px);
   max-height: 90vh;
   padding: 3rem 1.5rem 1.5rem;
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: var(--radius-xl);
   color: var(--ink);
@@ -2027,17 +1978,13 @@ h2 {
 .lightbox-close {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   color: var(--ink);
   background: rgba(0, 0, 0, 0.08);
   font-size: 1.3rem;
   transition: background 160ms ease, transform 80ms var(--ease-press);
-}
-
-.lightbox-close:hover {
-  background: rgba(0, 0, 0, 0.14);
 }
 
 .lightbox-close:active {
@@ -2081,7 +2028,88 @@ h2 {
   transition-delay: 0.15s;
 }
 
-/* ── Responsive Adaptations ── */
+/* ─────────────────────────────────────────────────────────────
+   POINTER-ONLY HOVER STYLES
+   Prevents sticky hover states from remaining stuck on mobile touch
+   ───────────────────────────────────────────────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .wordmark:hover {
+    opacity: 0.75;
+  }
+  .nav-links a:hover {
+    color: var(--ink);
+  }
+  .nav-github:hover {
+    background: rgba(0, 0, 0, 0.08);
+  }
+  .button-accent:hover {
+    background: var(--blue-hover);
+    box-shadow: 0 6px 18px rgba(0, 113, 227, 0.35);
+  }
+  .button-quiet:hover {
+    background: #ffffff;
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-md);
+  }
+  .button:hover .arrow {
+    transform: translate(2px, 0);
+  }
+  .text-link:hover {
+    gap: 0.75rem;
+  }
+  .scroll-cue:hover {
+    color: var(--ink);
+  }
+  .pdf-topbar > a:hover {
+    background: rgba(0, 113, 227, 0.16);
+  }
+  .project-selector-card:hover {
+    background: #ffffff;
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  .project-selector-card:hover .card-action-cue {
+    color: var(--blue);
+    gap: 0.5rem;
+  }
+  .image-tile:hover {
+    z-index: 10 !important;
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-float);
+  }
+  .phone-shot:hover {
+    z-index: 10 !important;
+    opacity: 1;
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.22);
+  }
+  .profile-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+  .credential-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+  .credential-footer a:hover {
+    text-decoration: underline;
+  }
+  .contact-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.24);
+    transform: translateY(-2px);
+  }
+  .contact-link:hover .contact-arrow {
+    color: #ffffff;
+    transform: translate(2px, -2px);
+  }
+  .lightbox-close:hover {
+    background: rgba(0, 0, 0, 0.14);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TABLET ADAPTATIONS (1050px)
+   ───────────────────────────────────────────────────────────── */
 @media (max-width: 1050px) {
   :root {
     --page-pad: clamp(1.25rem, 4vw, 3rem);
@@ -2101,71 +2129,158 @@ h2 {
   }
 }
 
+/* ─────────────────────────────────────────────────────────────
+   MOBILE-NATIVE RESPONSIVE ADAPTATIONS (768px and below)
+   Preserves desktop fully while optimizing touch ergonomics
+   ───────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
+  :root {
+    --page-pad: 1.25rem;
+  }
+
   .site-header {
-    background: rgba(245, 245, 247, 0.92);
+    background: rgba(245, 245, 247, 0.94);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
+    backdrop-filter: saturate(180%) blur(24px);
   }
+
   .nav-shell {
-    min-height: 52px;
+    min-height: 54px;
+    padding: 0 var(--page-pad);
+    padding-left: max(var(--page-pad), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--page-pad), env(safe-area-inset-right, 0px));
   }
+
+  /* Apple-style floating blurred dropdown sheet */
   .nav-links {
     position: fixed;
-    top: 52px;
+    top: calc(54px + env(safe-area-inset-top, 0px));
     left: 0;
     right: 0;
     display: none;
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    padding: 0.5rem var(--page-pad) 1.5rem;
-    background: rgba(245, 245, 247, 0.97);
-    -webkit-backdrop-filter: blur(28px);
-    backdrop-filter: blur(28px);
+    margin: 0;
+    padding: 0.6rem var(--page-pad) calc(1.8rem + env(safe-area-inset-bottom, 0px));
+    background: rgba(245, 245, 247, 0.96);
+    -webkit-backdrop-filter: saturate(180%) blur(28px);
+    backdrop-filter: saturate(180%) blur(28px);
     border-bottom: 1px solid var(--line);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    transform: translateY(-8px);
+    opacity: 0;
+    transition: transform 220ms var(--ease-spring), opacity 180ms ease;
   }
+
   .nav-links.menu-visible {
     display: flex;
+    transform: translateY(0);
+    opacity: 1;
   }
+
   .nav-links a {
-    padding: 0.9rem 0;
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0.75rem 0;
     border-bottom: 1px solid var(--line);
-    font-size: 0.98rem;
+    font-size: 1.05rem;
+    font-weight: 500;
   }
+
   .nav-links a:last-child {
     border-bottom: none;
   }
+
   .nav-links a.is-active::after {
     display: none;
   }
+
   .menu-toggle {
-    display: block;
-  }
-  .menu-toggle[aria-expanded="true"] span:first-child {
-    transform: translateY(3.25px) rotate(45deg);
-  }
-  .menu-toggle[aria-expanded="true"] span:last-child {
-    transform: translateY(-3.25px) rotate(-45deg);
+    display: flex;
   }
 
+  .menu-toggle[aria-expanded="true"] span:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+
+  .menu-toggle[aria-expanded="true"] span:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  /* Hero Section: 100svh stable viewport */
   .hero-section {
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 2.5rem;
-    padding-top: 6.5rem;
+    gap: 2.2rem;
+    padding-top: calc(5.8rem + env(safe-area-inset-top, 0px));
+    padding-bottom: 3.5rem;
   }
+
+  h1 {
+    font-size: clamp(2.4rem, 10vw, 4.2rem);
+    margin-bottom: 1.1rem;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 8vw, 3.2rem);
+    margin-bottom: 1rem;
+  }
+
+  .hero-lede {
+    font-size: 1.02rem;
+    margin-bottom: 1.7rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
+    width: 100%;
+  }
+
+  .hero-actions .button {
+    width: 100%;
+    min-height: 48px;
+    font-size: 0.94rem;
+    justify-content: center;
+  }
+
+  .hero-meta {
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 1.8rem;
+    padding-top: 1.2rem;
+  }
+
   .hero-visual {
-    max-width: 420px;
+    max-width: 380px;
     margin: 0 auto;
+    width: 100%;
   }
+
+  .portrait-frame {
+    aspect-ratio: 4 / 4.8;
+  }
+
   .scroll-cue {
     display: none;
   }
 
+  /* Project Selection Deck on Mobile */
   .project-selector-deck {
     grid-template-columns: 1fr;
     gap: 0.85rem;
+    margin-bottom: 2.2rem;
+  }
+
+  .project-selector-card {
+    min-height: auto;
+    padding: 1.25rem;
   }
 
   .project-layout,
@@ -2173,41 +2288,120 @@ h2 {
   .spotifai-layout {
     display: flex;
     flex-direction: column;
-    gap: 2.2rem;
+    gap: 2rem;
   }
+
+  .project-copy h2 {
+    font-size: clamp(2.1rem, 8vw, 3.2rem);
+  }
+
+  .metric-row {
+    gap: 0.75rem;
+  }
+
   .metric-row.metric-four {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 1rem;
+    row-gap: 1.1rem;
   }
 
+  .metric strong {
+    font-size: clamp(1.2rem, 6vw, 1.6rem);
+  }
+
+  /* Clean, structured touch screenshot presentation on mobile */
   .project-gallery {
-    min-height: clamp(340px, 90vw, 460px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    min-height: auto;
+    margin-top: 1rem;
   }
 
+  .image-tile {
+    position: relative;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-md);
+  }
+
+  .gallery-note {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    margin-top: 0.4rem;
+  }
+
+  /* spotifai Orthographic Phone Trio for Mobile */
   .phone-gallery {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     min-height: 400px;
-  }
-  .phone-shot {
-    width: 31%;
-    max-width: 175px;
-    border-width: 5px;
+    width: 100%;
   }
 
+  .phone-shot {
+    width: 32%;
+    max-width: 165px;
+    border-width: 4px;
+    border-radius: 20px;
+  }
+
+  .phone-left {
+    left: 2%;
+    top: 12%;
+    transform: translateY(12px) scale(0.92);
+  }
+
+  .phone-center {
+    left: 33%;
+    top: 4%;
+    transform: translateY(0);
+    z-index: 3;
+  }
+
+  .phone-right {
+    right: 2%;
+    top: 12%;
+    transform: translateY(12px) scale(0.92);
+  }
+
+  /* Campus & Profile on Mobile */
   .campus-showcase {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
+
   .campus-visual {
     max-width: 380px;
     margin: 0 auto;
+    width: 100%;
   }
+
+  .campus-portrait-frame {
+    min-height: 440px;
+  }
+
   .campus-visual .float-note.note-top {
-    left: 0.5rem;
-    top: 0.5rem;
+    left: 0.6rem;
+    top: 0.6rem;
+    font-size: 0.72rem;
+    padding: 0.55rem 0.8rem;
   }
+
   .campus-visual .float-note.note-bottom {
-    right: 0.5rem;
-    bottom: 0.5rem;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    font-size: 0.72rem;
+    padding: 0.55rem 0.8rem;
   }
 
   .principles-grid {
@@ -2215,17 +2409,104 @@ h2 {
     gap: 1.2rem;
   }
 
+  /* CV Page on Mobile */
+  .cv-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .cv-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cv-actions .button {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+  }
+
+  .cv-actions .text-link {
+    justify-content: center;
+  }
+
+  .pdf-shell iframe {
+    height: 55svh;
+    min-height: 380px;
+  }
+
+  .pdf-hint {
+    display: none;
+  }
+
+  /* Credentials on Mobile */
   .credential-grid {
     grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  /* Contact Page on Mobile */
+  .contact-page {
+    padding-top: 5rem;
+  }
+
+  .contact-page h2 {
+    font-size: clamp(2.6rem, 11vw, 4.2rem);
   }
 
   .contact-links {
     grid-template-columns: 1fr;
+    gap: 0.85rem;
   }
+
+  .contact-link {
+    min-height: 72px;
+  }
+
   .site-footer {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.8rem;
+    margin-top: 2.5rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SMALL PHONES (390px and below, e.g. iPhone SE / mini)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 420px) {
+  :root {
+    --page-pad: 1rem;
+  }
+
+  .hero-meta {
+    gap: 0.8rem;
+  }
+
+  .meta-value {
+    font-size: 1.35rem;
+  }
+
+  .meta-label {
+    font-size: 0.65rem;
+  }
+
+  .phone-shot {
+    width: 32%;
+    border-width: 3.5px;
+    border-radius: 17px;
+  }
+
+  .phone-caption {
+    font-size: 0.55rem;
+    padding: 0.35rem 0.2rem;
+  }
+
+  .project-selector-card {
+    padding: 1.1rem;
   }
 }
 
