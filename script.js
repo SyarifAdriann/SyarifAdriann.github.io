@@ -123,6 +123,16 @@
       const target = tab.getAttribute('data-project-target');
       if (target) {
         switchProject(target);
+        // On mobile, scroll the active panel into view so users don't have to scroll down
+        if (window.innerWidth <= 768) {
+          const activePanel = document.getElementById(`panel-${target}`);
+          if (activePanel) {
+            // Small delay so the panel is visible before scrolling
+            setTimeout(() => {
+              activePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+          }
+        }
       }
     });
   });
