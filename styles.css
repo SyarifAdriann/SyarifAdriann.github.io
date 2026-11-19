@@ -2613,3 +2613,43 @@ h2 {
     backdrop-filter: none !important;
   }
 }
+
+/* ── Hero Location & Stack ─────────────────────────────── */
+.hero-location {
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink-tertiary);
+  letter-spacing: 0.01em;
+}
+
+.hero-stack {
+  margin-top: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.stack-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ink-tertiary);
+  text-transform: uppercase;
+}
+
+.stack-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.stack-tags span {
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-xs);
+  color: var(--ink-secondary);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  font-size: 0.72rem;
+  font-weight: 500;
+}

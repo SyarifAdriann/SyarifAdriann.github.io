@@ -18,13 +18,13 @@
   window.addEventListener('resize', updateProgress, { passive: true });
   updateProgress();
 
-  // Copyright Year
+  // Hak Cipta Tahun
   const currentYear = $('#current-year');
   if (currentYear) {
     currentYear.textContent = new Date().getFullYear();
   }
 
-  // Mobile Navigation Toggle
+  // Navigasi Mobile (toggle)
   const menuToggle = $('#menu-toggle');
   const navLinks = $('#nav-links');
   const closeMenu = () => {
@@ -47,7 +47,7 @@
     if (window.innerWidth > 768) closeMenu();
   });
 
-  // Section Tracking for Nav Links
+  // Tracking Bagian Link Navigasi
   const sections = $$('main section[id]');
   const navAnchors = $$('.nav-links a');
 
@@ -69,7 +69,7 @@
 
     sections.forEach((section) => sectionObserver.observe(section));
 
-    // Scroll Reveal Animations
+    // Animasi Scroll Reveal
     const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -85,7 +85,7 @@
     $$('.reveal').forEach((element) => element.classList.add('is-visible'));
   }
 
-  // Apple-style Project Segmented Switcher
+  // Project Switcher segmented gaya Apple
   const projectTabs = $$('.project-selector-card');
   const projectPanels = $$('.project-panel');
 
